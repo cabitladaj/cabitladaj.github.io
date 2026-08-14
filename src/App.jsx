@@ -1,18 +1,50 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { 
+  FaReact, 
+  FaJs, 
+  FaDatabase,
+  FaPhp,
+  FaGithub 
+} from 'react-icons/fa'
+import { 
+  SiRuby, 
+  SiTailwindcss, 
+  SiPostman 
+} from 'react-icons/si'
+
 import heroImg from './assets/me.png'
 import heroImgDark from './assets/dark.png'
 import standImg from './assets/stand.png'
 import reachImg from './assets/reach.png'
+import caffe0 from './assets/0.png'
+import caffe1 from './assets/1.png'
+import caffe2 from './assets/2.png'
+import caffe3 from './assets/3.png'
+import caffe4 from './assets/4.png'
+import caffe5 from './assets/5.png'
+import caffe6 from './assets/6.png'
+import caffe7 from './assets/7.png'
+import coming from './assets/coming.png'
+
 
 import './App.css'
 
 function App() {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState(null) // 'success' | 'error' | null
+  const [submitStatus, setSubmitStatus] = useState(null)
 
   const [activeTab, setActiveTab] = useState('all')
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('hero')
+
+  // States para sa Image Gallery Modal
+  const [selectedProject, setSelectedProject] = useState(null)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+
+  // References para sa pag-track ng swipe
+  const touchStartX = useRef(0)
+  const touchEndX = useRef(0)
+
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'light'
   })
@@ -106,30 +138,146 @@ function App() {
     }
   }
 
-  const projects = [
+  const techSkills = [
+    { name: 'React.js', percentage: 90, color: 'linear-gradient(90deg, #06b6d4, #22d3ee)', icon: <FaReact /> },
+    { name: 'JavaScript (ES6+)', percentage: 90, color: 'linear-gradient(90deg, #eab308, #facc15)', icon: <FaJs /> },
+    { name: 'PHP', percentage: 88, color: 'linear-gradient(90deg, #777bb3, #9fa8da)', icon: <FaPhp /> },
+    { name: 'Ruby on Rails', percentage: 85, color: 'linear-gradient(90deg, #ef4444, #f87171)', icon: <SiRuby /> },
+    { name: 'PostgreSQL', percentage: 85, color: 'linear-gradient(90deg, #3b82f6, #60a5fa)', icon: <FaDatabase /> },
+    { name: 'Tailwind CSS', percentage: 85, color: 'linear-gradient(90deg, #06b6d4, #22d3ee)', icon: <SiTailwindcss /> },
+    { name: 'Postman', percentage: 85, color: 'linear-gradient(90deg, #ff6c37, #fb923c)', icon: <SiPostman /> },
+    { name: 'GitHub', percentage: 90, color: 'linear-gradient(90deg, #333333, #666666)', icon: <FaGithub /> }
+  ]
+
+  const workExperience = [
     {
-      title: 'Pink Bites POS',
+      role: 'System Developer',
+      company: 'K-COOP (Matimpiin St., Quezon City)',
+      period: 'June 2024 – Present',
+      points: [
+        'Design and optimize database structures, queries, and stored procedures.',
+        'Generate reports and dashboards for loan monitoring and financial analysis.',
+        'Troubleshoot system issues and provide technical support to users.',
+        'Collaborate with operations and management teams to streamline lending processes.',
+        'Ensure data accuracy, security, and compliance with company policies.'
+      ]
+    },
+    {
+      role: 'Team Lead Programmer',
+      company: 'Capstone Project (Quezon City)',
+      period: '2023 - 2025',
+      points: [
+        'Developed core system features using PHP, JavaScript.',
+        'Designed and managed the database structure and system architecture.',
+        'Collaborated with advisers and stakeholders to gather requirements and implement feedback.',
+        'Performed system testing, debugging, and optimization before final deployment.'
+      ]
+    }
+  ]
+
+  const certificates = [
+    {
+      title: 'Path to Leadership',
+      date: '2026',
+      issuer: 'Professional Development'
+    },
+    {
+      title: 'Cyber Security',
+      date: '2026',
+      issuer: 'Security Governance'
+    },
+    {
+      title: 'Introduction To Laravel Framework',
+      date: 'Oct 16, 2023',
+      issuer: 'Web Development'
+    },
+    {
+      title: 'Artificial Intelligence: The life that is to come',
+      date: 'Oct 14, 2023',
+      issuer: 'AI & Innovation'
+    }
+  ]
+
+ const projects = [
+    {
+      title: 'Xanne Cafe POS',
       category: 'web',
-      tech: ['React', 'Supabase', 'Tailwind CSS'],
+      tech: [
+        { name: 'React', icon: <FaReact />, color: '#06b6d4' },
+        { name: 'Supabase', icon: <FaDatabase />, color: '#3ecf8e' },
+        { name: 'Tailwind CSS', icon: <SiTailwindcss />, color: '#38bdf8' }
+      ],
       description: 'Point of Sale system with automated inventory management, cashier authentication, and structured financial reporting.',
+      images: [caffe0, caffe1, caffe2,caffe3,caffe4,caffe5,caffe6,caffe7]
     },
     {
       title: 'Enterprise Microfinance Core',
       category: 'enterprise',
-      tech: ['Ruby on Rails', 'PostgreSQL', 'React'],
+      tech: [
+        { name: 'Ruby on Rails', icon: <SiRuby />, color: '#ef4444' },
+        { name: 'PostgreSQL', icon: <FaDatabase />, color: '#3b82f6' },
+        { name: 'React', icon: <FaReact />, color: '#06b6d4' }
+      ],
       description: 'Accounting distribution engines, equity filter validation modules, and member share certificate processing systems.',
+      images: [coming]
     },
     {
       title: 'Developer Portfolio',
       category: 'web',
-      tech: ['React', 'Vite', 'CSS3'],
+      tech: [
+        { name: 'React', icon: <FaReact />, color: '#06b6d4' },
+        { name: 'Vite', icon: <FaJs />, color: '#646cff' },
+        { name: 'CSS3', icon: <SiTailwindcss />, color: '#264de4' }
+      ],
       description: 'Clean, responsive personal portfolio displaying technical stack, project history, and professional background.',
+      images: [coming]
     }
   ]
 
   const filteredProjects = activeTab === 'all' 
     ? projects 
     : projects.filter(p => p.category === activeTab)
+
+  // Handlers para sa Image Gallery Modal navigation
+  const openGallery = (project) => {
+    setSelectedProject(project)
+    setCurrentImageIndex(0)
+  }
+
+  const nextImage = (e) => {
+    if (e) e.stopPropagation()
+    if (selectedProject) {
+      setCurrentImageIndex((prev) => (prev + 1) % selectedProject.images.length)
+    }
+  }
+
+  const prevImage = (e) => {
+    if (e) e.stopPropagation()
+    if (selectedProject) {
+      setCurrentImageIndex((prev) => (prev - 1 + selectedProject.images.length) % selectedProject.images.length)
+    }
+  }
+
+  // Swipe Gesture Handlers directly on Image Touch
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX
+  }
+
+  const handleTouchEnd = () => {
+    if (!selectedProject) return
+    const distance = touchStartX.current - touchEndX.current
+    const minSwipeDistance = 50 // Minimum distance para mag-trigger ang swipe
+
+    if (distance > minSwipeDistance) {
+      nextImage() // Swipe pakanan pakaliwa -> Next
+    } else if (distance < -minSwipeDistance) {
+      prevImage() // Swipe pakaliwa pakanan -> Previous
+    }
+  }
 
   return (
     <div className="portfolio-app-wrapper">
@@ -159,9 +307,22 @@ function App() {
               </a>
             </div>
 
-            <button className="theme-toggle-btn" onClick={toggleTheme} aria-label="Toggle Theme">
-              {theme === 'light' ? '🌙' : '☀️'}
-            </button>
+            <label className="theme-switch" aria-label="Toggle Theme">
+              <input 
+                type="checkbox" 
+                checked={theme === 'dark'} 
+                onChange={toggleTheme} 
+              />
+              <span className="slider">
+                <span className="mode-text">
+                  {theme === 'dark' ? 'LIGHT' : 'DARK'}
+                </span>
+                <span className="icon-circle">
+                  {theme === 'dark' ? '🌙' : '☀️'}
+                </span>
+              </span>
+            </label>
+
             <button className="hamburger-btn" onClick={toggleMenu} aria-label="Toggle Menu">
               {isMenuOpen ? '✕' : '☰'}
             </button>
@@ -176,7 +337,7 @@ function App() {
             </h1>
             <h2 className="hero-subtitle">Full-Stack Developer</h2>
             <p className="hero-description">
-              Building modern, scalable, and automated web applications with Ruby on Rails, React.js, and PostgreSQL.
+              Building modern, scalable, and automated web applications with a focus on resilient backend architecture and seamless user experiences. Specializing in Ruby on Rails, React.js, and PostgreSQL.
             </p>
             <div className="cta-buttons">
               <a href="#projects" className="btn btn-dark" onClick={(e) => scrollToSection(e, 'projects')}>View Projects</a>
@@ -203,21 +364,25 @@ function App() {
           </div>
 
           <div className="hero-right">
-            <div className="stats-card">
+            <div className="stats-card modern-dashboard-card">
+              <div className="dash-header">
+                <span className="dash-dot"></span>
+                <span className="dash-title">Developer Profile</span>
+              </div>
+              <div className="stat-row">
+                <span className="stat-label">Core Stack</span>
+                <span className="stat-value">Rails & React</span>
+              </div>
               <div className="stat-row">
                 <span className="stat-label">Experience</span>
                 <span className="stat-value">2+ Years</span>
               </div>
               <div className="stat-row">
-                <span className="stat-label">Projects</span>
-                <span className="stat-value">50+</span>
+                <span className="stat-label">Location</span>
+                <span className="stat-value">Philippines 🇵🇭</span>
               </div>
               <div className="stat-row">
-                <span className="stat-label">Clients</span>
-                <span className="stat-value">30+</span>
-              </div>
-              <div className="stat-row">
-                <span className="stat-label">Availability :</span>
+                <span className="stat-label">Status</span>
                 <span className="stat-value status-available">Available for Work</span>
               </div>
             </div>
@@ -266,33 +431,77 @@ function App() {
           </div>
         </section>
 
-        {/* Skills Section */}
-        <section id="skills" className="section">
-          <h2 className="section-title">Technical Expertise</h2>
-          <div className="skills-grid">
-            <div className="skill-category">
-              <h3>Frontend Development</h3>
-              <ul>
-                <li>React.js</li>
-                <li>JavaScript (ES6+)</li>
-                <li>Tailwind CSS / HTML5</li>
-              </ul>
-            </div>
-            <div className="skill-category">
-              <h3>Backend & Database</h3>
-              <ul>
-                <li>Ruby on Rails</li>
-                <li>PostgreSQL</li>
-                <li>Supabase / REST APIs</li>
-              </ul>
-            </div>
-            <div className="skill-category">
-              <h3>Tools & Workflow</h3>
-              <ul>
-                <li>Git / GitHub</li>
-                <li>Ubuntu / Linux CLI</li>
-                <li>Vite / VS Code</li>
-              </ul>
+        {/* Skills, Experience & Certificates 3-Column Split Section */}
+        <section id="skills" className="section skills-split-section">
+          <div className="skills-main-glass-card">
+            <div className="skills-split-grid">
+              
+              {/* Column 1: Technical Skills */}
+              <div className="skills-column">
+                <h2 className="split-column-title">Technical <span className="highlight-name">Skills</span></h2>
+                <div className="skills-list-container">
+                  {techSkills.map((skill, index) => (
+                    <div key={index} className="skill-progress-item">
+                      <div className="skill-info-row">
+                        <span className="skill-text-name" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{ color: skill.color, fontSize: '1.2rem', display: 'flex' }}>
+                            {skill.icon}
+                          </span>
+                          {skill.name}
+                        </span>
+                        <span className="skill-text-percentage">{skill.percentage}%</span>
+                      </div>
+                      <div className="progress-bar-container">
+                        <div 
+                          className="progress-bar-fill" 
+                          style={{ 
+                            width: `${skill.percentage}%`, 
+                            background: skill.color 
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Column 2: Work Experience */}
+              <div className="experience-column">
+                <h2 className="split-column-title">Work <span className="highlight-name">Experience</span></h2>
+                <div className="experience-list-container">
+                  {workExperience.map((exp, index) => (
+                    <div key={index} className="experience-card">
+                      <div className="exp-card-header">
+                        <h3>{exp.role}</h3>
+                        <span className="exp-period">{exp.period}</span>
+                      </div>
+                      <p className="exp-company">💼 {exp.company}</p>
+                      <ul className="exp-points-list">
+                        {exp.points.map((pt, i) => (
+                          <li key={i}>{pt}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Column 3: Certificates */}
+              <div className="certificates-column">
+                <h2 className="split-column-title">Certificates</h2>
+                <div className="experience-list-container">
+                  {certificates.map((cert, index) => (
+                    <div key={index} className="experience-card">
+                      <div className="exp-card-header">
+                        <h3>{cert.title}</h3>
+                        <span className="exp-period">{cert.date}</span>
+                      </div>
+                      <p className="exp-company">📜 {cert.issuer}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
             </div>
           </div>
         </section>
@@ -308,20 +517,175 @@ function App() {
 
           <div className="projects-grid">
             {filteredProjects.map((project) => (
-              <div className="project-card" key={project.title}>
+              <div 
+                className="project-card" 
+                key={project.title} 
+                onClick={() => openGallery(project)}
+                style={{ cursor: 'pointer' }}
+              >
+                {/* Project Image Preview with multiple images badge (Updated height for mobile visibility) */}
+                {project.images && project.images.length > 0 && (
+                  <div 
+                    className="project-image-container" 
+                    style={{ position: 'relative', overflow: 'hidden', borderRadius: '10px', marginBottom: '15px' }}
+                  >
+                    <img 
+                      src={project.images[0]} 
+                      alt={project.title} 
+                      style={{ 
+                        width: '100%', 
+                        height: '220px', // Pinalaki mula 160px para mas kita sa phone
+                        objectFit: 'cover', 
+                        transition: 'transform 0.3s ease' 
+                      }} 
+                      onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                      onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                    />
+                    <div style={{
+                      position: 'absolute', bottom: '10px', right: '10px', background: 'rgba(0, 0, 0, 0.7)',
+                      color: '#fff', padding: '4px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 'bold'
+                    }}>
+                      📸 {project.images.length} Features
+                    </div>
+                  </div>
+                )}
                 <div>
                   <h3>{project.title}</h3>
                   <p>{project.description}</p>
                 </div>
-                <div className="tech-tags">
+                {/* Tech Tags na may Icon at Kulay */}
+                <div className="tech-tags" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '12px' }}>
                   {project.tech.map((t, i) => (
-                    <span className="tag" key={i}>{t}</span>
+                    <span 
+                      className="tag" 
+                      key={i}
+                      style={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: '6px', 
+                        padding: '5px 10px', 
+                        background: 'rgba(255, 255, 255, 0.05)', 
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        borderRadius: '6px', 
+                        fontSize: '0.85rem' 
+                      }}
+                    >
+                      <span style={{ color: t.color, display: 'flex', fontSize: '1rem' }}>
+                        {t.icon}
+                      </span>
+                      {t.name}
+                    </span>
                   ))}
                 </div>
               </div>
             ))}
           </div>
         </section>
+
+        {/* Modal / Gallery Slideshow */}
+        {selectedProject && (
+          <div 
+            className="image-modal-overlay" 
+            onClick={() => setSelectedProject(null)} 
+            style={{
+              position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+              backgroundColor: 'rgba(0, 0, 0, 0.85)', display: 'flex', justifyContent: 'center',
+              alignItems: 'center', zIndex: 1000, padding: '20px'
+            }}
+          >
+            <div 
+              className="image-modal-content" 
+              onClick={(e) => e.stopPropagation()} 
+              style={{ position: 'relative', maxWidth: '850px', width: '100%', textAlign: 'center' }}
+            >
+              {/* Close Button */}
+              <button 
+                onClick={() => setSelectedProject(null)} 
+                style={{
+                  position: 'absolute', top: '-45px', right: '0', background: 'none', border: 'none',
+                  color: '#fff', fontSize: '2rem', cursor: 'pointer', zIndex: 10
+                }}
+              >
+                ✕
+              </button>
+
+              {/* Project Title sa loob ng modal */}
+              <h3 style={{ color: '#fff', marginBottom: '15px' }}>{selectedProject.title} (Feature {currentImageIndex + 1} of {selectedProject.images.length})</h3>
+
+              {/* Main Display Image na may direktang Swipe Handlers */}
+              <div 
+                style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                
+                {/* Previous Button */}
+                {selectedProject.images.length > 1 && (
+                  <button 
+                    onClick={prevImage}
+                    style={{
+                      position: 'absolute', left: '10px', background: 'rgba(0,0,0,0.6)', color: '#fff',
+                      border: 'none', borderRadius: '50%', width: '40px', height: '40px', fontSize: '1.2rem',
+                      cursor: 'pointer', zIndex: 5, display: 'flex', alignItems: 'center', justifyContent: 'center'
+                    }}
+                  >
+                    ❮
+                  </button>
+                )}
+
+               <img 
+                  src={selectedProject.images[currentImageIndex]} 
+                  alt="Feature Preview" 
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                  style={{ 
+                    width: '100%', 
+                    height: 'auto', 
+                    maxHeight: '85vh', // Pinalaki para mas malinaw sa screen
+                    borderRadius: '12px', 
+                    objectFit: 'cover', 
+                    background: '#111', 
+                    touchAction: 'pan-y',
+                    cursor: 'grab' 
+                  }} 
+                />
+
+                {/* Next Button */}
+                {selectedProject.images.length > 1 && (
+                  <button 
+                    onClick={nextImage}
+                    style={{
+                      position: 'absolute', right: '10px', background: 'rgba(0,0,0,0.6)', color: '#fff',
+                      border: 'none', borderRadius: '50%', width: '40px', height: '40px', fontSize: '1.2rem',
+                      cursor: 'pointer', zIndex: 5, display: 'flex', alignItems: 'center', justifyContent: 'center'
+                    }}
+                  >
+                    ❯
+                  </button>
+                )}
+              </div>
+
+              {/* Thumbnails indicator */}
+              {selectedProject.images.length > 1 && (
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '15px' }}>
+                  {selectedProject.images.map((img, idx) => (
+                    <img 
+                      key={idx}
+                      src={img}
+                      alt="Thumbnail"
+                      onClick={() => setCurrentImageIndex(idx)}
+                      style={{
+                        width: '60px', height: '40px', objectFit: 'cover', borderRadius: '6px', cursor: 'pointer',
+                        border: currentImageIndex === idx ? '2px solid #06b6d4' : '2px solid transparent',
+                        opacity: currentImageIndex === idx ? '1' : '0.6',
+                        transition: 'all 0.2s ease'
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Contact Section */}
         <section id="contact" className="section contact-section">
@@ -335,44 +699,20 @@ function App() {
             </div>
 
             <div className="contact-content-grid">
-              
-              {/* Left Side: Contact Form */}
               <div className="contact-form-card">
                 <form onSubmit={handleSubmit} className="contact-form">
-                  
                   <div className="form-group">
                     <label htmlFor="name">Your Name</label>
-                    <input 
-                      type="text" 
-                      id="name" 
-                      name="name" 
-                      placeholder="e.g. Juan Dela Cruz" 
-                      required 
-                    />
+                    <input type="text" id="name" name="name" placeholder="e.g. Juan Dela Cruz" required />
                   </div>
-
                   <div className="form-group">
                     <label htmlFor="email">Your Email</label>
-                    <input 
-                      type="email" 
-                      id="email" 
-                      name="email" 
-                      placeholder="e.g. juan@example.com" 
-                      required 
-                    />
+                    <input type="email" id="email" name="email" placeholder="e.g. juan@example.com" required />
                   </div>
-
                   <div className="form-group">
                     <label htmlFor="message">Your Message</label>
-                    <textarea 
-                      id="message" 
-                      name="message" 
-                      rows="4" 
-                      placeholder="Tell me about your project or inquiry..." 
-                      required
-                    ></textarea>
+                    <textarea id="message" name="message" rows="4" placeholder="Tell me about your project or inquiry..." required></textarea>
                   </div>
-
                   <button type="submit" className="btn btn-submit" disabled={isSubmitting}>
                     {isSubmitting ? (
                       <span className="loading-state">
@@ -389,58 +729,35 @@ function App() {
                       </>
                     )}
                   </button>
-
-                  {/* Status Messages */}
                   {submitStatus === 'success' && (
                     <p className="status-msg success-msg">✅ Message sent successfully! I'll get back to you soon.</p>
                   )}
                   {submitStatus === 'error' && (
                     <p className="status-msg error-msg">❌ Failed to send message. Please try again or email directly.</p>
                   )}
-
                 </form>
               </div>
 
-              {/* Right Side: Visual Card */}
               <div className="contact-visual-card">
                 <div className="chat-bubble-popup">
                   <span className="pulse-dot"></span>
-                  Can you reach me!
+                  You can you reach me!
                 </div>
-
                 <div className="contact-avatar-wrapper">
                   <div className="contact-bg-shape"></div>
-                  <img 
-                    src={theme === 'light' ? reachImg : heroImgDark} 
-                    alt="Contact Character" 
-                    className="contact-avatar-img"
-                  />
+                  <img src={theme === 'light' ? reachImg : heroImgDark} alt="Contact Character" className="contact-avatar-img"/>
                 </div>
-
                 <div className="contact-info-badges">
                   <div className="info-badge">
                     <span className="badge-icon">📍</span>
                     <span>Philippines</span>
                   </div>
-                  <div className="info-badge">
-                    <span className="badge-icon">⚡</span>
-                    <span>Fast Response</span>
-                  </div>
                 </div>
-
               </div>
-
             </div>
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="footer-section">
-          <div className="footer-content">
-            <h2 className="section-title">Jerald Cabitlada</h2>
-            <p>© {new Date().getFullYear()} All rights reserved.</p>
-          </div>
-        </footer>
       </div>
     </div>
   )
