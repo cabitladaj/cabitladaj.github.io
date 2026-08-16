@@ -829,9 +829,11 @@ body {
 /* Grid Layout */
 .contact-content-grid {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 2.5rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px; /* Itaas mula sa dating mas maliit na gap */
   align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 /* 1. GLASSFORM CARD (Form Side) */
@@ -922,34 +924,51 @@ body {
 
 /* 2. VISUAL CARD (Character Side) */
 .contact-visual-card {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  min-height: 380px; /* Dinagdagan para mas maluwag */
   justify-content: center;
 }
 
 /* Pinalaking Avatar Wrapper */
+/* I-style ang wrapper para maging container ng images */
 .contact-avatar-wrapper {
   position: relative;
   width: 100%;
-  max-width: 380px; /* Pinalaki mula 320px */
-  height: 460px;    /* Pinalaki mula 380px */
+  min-height: 320px;
   display: flex;
   justify-content: center;
-  align-items: flex-end;
-  margin-top: 1.5rem;
+  align-items: center;
+}
+
+/* Common style para sa images */
+.contact-avatar-img {
+  position: absolute;
+  bottom: 0;
+  transition: opacity 0.5s ease-in-out; /* Ito ang nagbibigay ng smooth transition */
+  width: auto;
+  height: 90%;
+}
+
+/* Kapag active (depende sa theme), naka-opacity 1, kung hindi, 0 */
+.contact-avatar-img.active {
+  opacity: 1;
+}
+
+.contact-avatar-img:not(.active) {
+  opacity: 0;
 }
 
 /* Pinalaking Blob Background Shape */
 .contact-bg-shape {
   position: absolute;
-  width: 330px; /* Pinalaki mula 280px */
-  height: 330px;
+  width: 270px; /* Pinalaki mula 220px */
+  height: 270px; /* Pinalaki mula 220px */
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.2));
-  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-  z-index: 0;
-  animation: blobFloat 8s ease-in-out infinite alternate;
+  border-radius: 50% 40% 60% 40% / 40% 50% 50% 60%;
+  z-index: 1;
 }
 
 @keyframes blobFloat {
@@ -958,12 +977,12 @@ body {
 }
 
 .contact-avatar-img {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.2));
+  position: absolute;
+  bottom: 15px;
+  max-height: 310px; /* Pinalaki para mas sakto sa pinalaking bilog */
+  width: auto;
+  z-index: 2;
+  transition: opacity 0.5s ease-in-out;
 }
 
 /* Floating "Can you reach me?" Speech Bubble */
@@ -1218,6 +1237,144 @@ body {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+}
+
+/* Base state: Naka-slide pakanan o pakaliwa nang bahagya na may 0 opacity */
+section {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Kapag pumasok na sa screen */
+section.section-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* --- 1. HERO SECTION --- */
+section#hero {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 2s cubic-bezier(0.16, 1, 0.3, 1), transform 2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+section#hero.section-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* --- 1. ABOUT SECTION: Isa-isang lalabas ang mga elemento --- */
+section#about {
+  opacity: 1 !important; /* Hayaang laging kita ang section wrapper, ang mga bata ang a-animate */
+  transform: none !important;
+}
+
+section#about .about-avatar-container,
+section#about .about-card-title,
+section#about .about-text-content p,
+section#about .about-cta-group {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Kapag pumasok na ang section-visible, bibigyan natin sila ng staggered delay */
+section#about.section-visible .about-avatar-container {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.1s;
+}
+section#about.section-visible .about-card-title {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.3s;
+}
+section#about.section-visible .about-text-content p {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.5s;
+}
+section#about.section-visible .about-cta-group {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.7s;
+}
+
+
+/* --- 2. PROJECTS SECTION: Isa-isang mag-i-slide up ang mga Project Cards --- */
+section#projects {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+section#projects .section-title,
+section#projects .filter-tabs,
+section#projects .project-card {
+  opacity: 0;
+  transform: translateY(40px) scale(0.95);
+  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+section#projects.section-visible .section-title {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: 0.1s;
+}
+section#projects.section-visible .filter-tabs {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: 0.2s;
+}
+/* Staggered delay para sa bawat project card para sunod-sunod silang lumitaw */
+section#projects.section-visible .project-card:nth-child(1) {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: 0.35s;
+}
+section#projects.section-visible .project-card:nth-child(2) {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: 0.5s;
+}
+section#projects.section-visible .project-card:nth-child(3) {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: 0.65s;
+}
+
+
+/* --- 3. SKILLS SECTION: Sunod-sunod na columns --- */
+section#skills {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+section#skills .skills-column,
+section#skills .experience-column,
+section#skills .certificates-column {
+  opacity: 0;
+  transform: translateY(50px);
+  filter: blur(8px);
+  transition: opacity 1.2s ease, transform 1.2s ease, filter 1.2s ease;
+}
+
+section#skills.section-visible .skills-column {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+  transition-delay: 0.2s;
+}
+section#skills.section-visible .experience-column {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+  transition-delay: 0.4s;
+}
+section#skills.section-visible .certificates-column {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+  transition-delay: 0.6s;
 }
 
 .tag {
@@ -1582,6 +1739,8 @@ body {
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
     pointer-events: all;
   }
+
+  
 
   /* Sections Spacing for Mobile */
   .hero-section,
