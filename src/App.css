@@ -51,6 +51,8 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+
+
 /* Outer Wrapper */
 .portfolio-app-wrapper {
   width: 100%;
@@ -60,6 +62,16 @@ body {
 .portfolio-container {
   width: 100%;
   position: relative;
+}
+
+/* Kapag naka-light mode, lagyan ng konting filter o shadow para lumitaw */
+.light-mode .nav-logo {
+  filter: brightness(0) saturate(100%); /* Ginagawa nitong solid black kung puti man ang dating logo */
+}
+
+/* Kapag naka-dark mode */
+.dark-mode .nav-logo {
+  filter: brightness(1) invert(1); /* Ginagawa nitong puti */
 }
 
 /* FIXED NAVBAR */

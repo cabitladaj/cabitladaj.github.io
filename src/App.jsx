@@ -28,6 +28,8 @@ import caffe5 from './assets/5.png'
 import caffe6 from './assets/6.png'
 import caffe7 from './assets/7.png'
 import coming from './assets/coming.png'
+import logo from './assets/logo.png'
+
 
 import './App.css'
 
@@ -294,8 +296,15 @@ function App() {
         <div className="portfolio-container">
           {/* Navbar */}
           <nav className="navbar">
-            <div className="logo">&lt;/&gt; Portfolio</div>
-            
+           <div className="logo" style={{ display: 'flex', alignItems: 'center', paddingLeft: '20px', marginTop: '10px' }}>
+  <img 
+    src={logo} 
+    alt="My Logo" 
+    className="nav-logo" 
+    style={{ height: '150px', width: 'auto', objectFit: 'contain' }} 
+  />
+</div>
+                      
             <ul className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
               <li><a href="#hero" className={activeSection === 'hero' ? 'active' : ''} onClick={(e) => scrollToSection(e, 'hero')}>Home</a></li>
               <li><a href="#about" className={activeSection === 'about' ? 'active' : ''} onClick={(e) => scrollToSection(e, 'about')}>About</a></li>
