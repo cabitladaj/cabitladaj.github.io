@@ -653,7 +653,7 @@ function App() {
                 <div className="contact-visual-card">
                   <div className="chat-bubble-popup">
                     <span className="pulse-dot"></span>
-                   You can you reach me!
+                   You can reach me!
                   </div>
 
                   <div className="contact-avatar-wrapper">
