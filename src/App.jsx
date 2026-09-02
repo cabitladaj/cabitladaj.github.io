@@ -291,7 +291,7 @@ function App() {
 
   return (
     /* 2. Dito inilagay ang StarfieldBackground para sakupin ang buong background */
-    <StarfieldBackground count={400} speed={0.4} twinkle={true}>
+    <StarfieldBackground count={400} speed={0.4} twinkle={true} theme={theme}>
       <div className="portfolio-app-wrapper">
         <div className="portfolio-container">
           {/* Navbar */}
@@ -537,40 +537,40 @@ function App() {
             <div className="projects-grid">
               {filteredProjects.map((project) => (
                 <div 
-                  className="project-card" 
+                  className="project-card stacked-card" 
                   key={project.title} 
                   onClick={() => openGallery(project)}
                   style={{ cursor: 'pointer' }}
                 >
                   {project.images && project.images.length > 0 && (
-                    <div 
-                      className="project-image-container" 
-                      style={{ position: 'relative', overflow: 'hidden', borderRadius: '10px', marginBottom: '15px' }}
-                    >
-                      <img 
-                        src={project.images[0]} 
-                        alt={project.title} 
-                        style={{ 
-                          width: '100%', 
-                          height: '220px', 
-                          objectFit: 'cover', 
-                          transition: 'transform 0.3s ease' 
-                        }} 
-                        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                      />
-                      <div style={{
-                        position: 'absolute', bottom: '10px', right: '10px', background: 'rgba(0, 0, 0, 0.7)',
-                        color: '#fff', padding: '4px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 'bold'
-                      }}>
-                        📸 {project.images.length} Features
-                      </div>
+                    <div className="stacked-images-container">
+                      {project.images.slice(0, 3).reverse().map((imgSrc, imgIndex) => {
+                        const rotations = ['-6deg', '3deg', '0deg']
+                        const offsets = ['-10px', '-5px', '0px']
+                        
+                        return (
+                          <div 
+                            key={imgIndex} 
+                            className="card-layer"
+                            style={{
+                              transform: `rotate(${rotations[imgIndex] || '0deg'}) translateY(${offsets[imgIndex] || '0px'})`,
+                              zIndex: imgIndex + 1
+                            }}
+                          >
+                            <img src={imgSrc} alt={`${project.title} layer`} />
+                          </div>
+                        )
+                      })}
+                      
+                    
                     </div>
                   )}
+
                   <div>
                     <h3>{project.title}</h3>
                     <p>{project.description}</p>
                   </div>
+
                   <div className="tech-tags" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '12px' }}>
                     {project.tech.map((t, i) => (
                       <span 
@@ -699,34 +699,39 @@ function App() {
           onClick={() => setSelectedProject(null)} 
           style={{
             position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
-            backgroundColor: 'rgba(0, 0, 0, 0.85)', display: 'flex', justifyContent: 'center',
-            alignItems: 'center', zIndex: 1000, padding: '20px'
+            backgroundColor: 'rgba(0, 0, 0, 0.9)', display: 'flex', justifyContent: 'center',
+            alignItems: 'center', zIndex: 1000, padding: '10px', boxSizing: 'border-box'
           }}
         >
           <div 
             className="image-modal-content" 
             onClick={(e) => e.stopPropagation()} 
-            style={{ position: 'relative', maxWidth: '850px', width: '100%', textAlign: 'center' }}
+            style={{ position: 'relative', maxWidth: '850px', width: '100%', textAlign: 'center', display: 'flex', flexDirection: 'column', maxHeight: '95vh' }}
           >
+            {/* Close Button */}
             <button 
               onClick={() => setSelectedProject(null)} 
               style={{
-                position: 'absolute', top: '-45px', right: '0', background: 'none', border: 'none',
-                color: '#fff', fontSize: '2rem', cursor: 'pointer', zIndex: 10
+                position: 'absolute', top: '-40px', right: '0', background: 'none', border: 'none',
+                color: '#fff', fontSize: '2rem', cursor: 'pointer', zIndex: 10, padding: '5px 10px'
               }}
             >
               ✕
             </button>
 
-            <h3 style={{ color: '#fff', marginBottom: '15px' }}>{selectedProject.title} (Feature {currentImageIndex + 1} of {selectedProject.images.length})</h3>
+            {/* Title & Counter */}
+            <h3 style={{ color: '#fff', fontSize: '1rem', marginBottom: '10px', padding: '0 40px' }}>
+              {selectedProject.title} ({currentImageIndex + 1} / {selectedProject.images.length})
+            </h3>
 
-            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {/* Main Image View with Carousel Animation Class */}
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, minHeight: '300px', overflow: 'hidden' }}>
               {selectedProject.images.length > 1 && (
                 <button 
                   onClick={prevImage}
                   style={{
-                    position: 'absolute', left: '10px', background: 'rgba(0,0,0,0.6)', color: '#fff',
-                    border: 'none', borderRadius: '50%', width: '40px', height: '40px', fontSize: '1.2rem',
+                    position: 'absolute', left: '5px', background: 'rgba(0,0,0,0.7)', color: '#fff',
+                    border: '1px solid rgba(255,255,255,0.2)', borderRadius: '50%', width: '38px', height: '38px', fontSize: '1.1rem',
                     cursor: 'pointer', zIndex: 5, display: 'flex', alignItems: 'center', justifyContent: 'center'
                   }}
                 >
@@ -734,21 +739,24 @@ function App() {
                 </button>
               )}
 
+              {/* Idinagdag ang carousel-slide class para sa smooth animation transition */}
              <img 
+                key={`slide-3d-${currentImageIndex}`}
                 src={selectedProject.images[currentImageIndex]} 
                 alt="Feature Preview" 
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
+                className="carousel-slide-img"
                 style={{ 
                   width: '100%', 
                   height: 'auto', 
-                  maxHeight: '85vh', 
+                  maxHeight: '68vh', 
                   borderRadius: '12px', 
-                  objectFit: 'cover', 
-                  background: '#111', 
+                  objectFit: 'contain', 
+                  background: '#0a0a0a', 
                   touchAction: 'pan-y',
-                  cursor: 'grab' 
+                  boxShadow: '0 20px 40px rgba(0, 0, 0, 0.6)'
                 }} 
               />
 
@@ -756,8 +764,8 @@ function App() {
                 <button 
                   onClick={nextImage}
                   style={{
-                    position: 'absolute', right: '10px', background: 'rgba(0,0,0,0.6)', color: '#fff',
-                    border: 'none', borderRadius: '50%', width: '40px', height: '40px', fontSize: '1.2rem',
+                    position: 'absolute', right: '5px', background: 'rgba(0,0,0,0.7)', color: '#fff',
+                    border: '1px solid rgba(255,255,255,0.2)', borderRadius: '50%', width: '38px', height: '38px', fontSize: '1.1rem',
                     cursor: 'pointer', zIndex: 5, display: 'flex', alignItems: 'center', justifyContent: 'center'
                   }}
                 >
@@ -766,8 +774,17 @@ function App() {
               )}
             </div>
 
+            {/* Thumbnails Row */}
             {selectedProject.images.length > 1 && (
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '15px' }}>
+              <div style={{ 
+                display: 'flex', 
+                justifyContent: 'flex-start', 
+                gap: '8px', 
+                marginTop: '12px', 
+                overflowX: 'auto', 
+                paddingBottom: '5px',
+                scrollbarWidth: 'thin'
+              }}>
                 {selectedProject.images.map((img, idx) => (
                   <img 
                     key={idx}
@@ -775,9 +792,9 @@ function App() {
                     alt="Thumbnail"
                     onClick={() => setCurrentImageIndex(idx)}
                     style={{
-                      width: '60px', height: '40px', objectFit: 'cover', borderRadius: '6px', cursor: 'pointer',
+                      width: '55px', height: '38px', flexShrink: '0', objectFit: 'cover', borderRadius: '4px', cursor: 'pointer',
                       border: currentImageIndex === idx ? '2px solid #06b6d4' : '2px solid transparent',
-                      opacity: currentImageIndex === idx ? '1' : '0.6',
+                      opacity: currentImageIndex === idx ? '1' : '0.5',
                       transition: 'all 0.2s ease'
                     }}
                   />

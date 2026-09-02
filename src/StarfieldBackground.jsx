@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
-export default function StarfieldBackground({ children, count = 350, speed = 0.4, twinkle = true }) {
+// 1. Idagdag ang 'theme' sa props
+export default function StarfieldBackground({ children, count = 350, speed = 0.4, twinkle = true, theme }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -28,7 +29,7 @@ export default function StarfieldBackground({ children, count = 350, speed = 0.4
     const stars = Array.from({ length: count }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      size: Math.random() * 2 + 0.8, // Pinalaki nang konti para mas madaling mamataan
+      size: Math.random() * 2 + 0.8,
       speed: (Math.random() * 0.4 + 0.1) * speed,
       alpha: Math.random() * 0.5 + 0.5,
       twinkleSpeed: Math.random() * 0.02 + 0.005,
@@ -37,10 +38,8 @@ export default function StarfieldBackground({ children, count = 350, speed = 0.4
     const render = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      
-      // BINAGO: Kapag light mode, mas madilim na kulay (Slate/Navy) para lumitaw sa puting background. Kapag dark, puti.
-      ctx.fillStyle = currentTheme === 'light' ? '#1e293b' : '#ffffff';
+      // Ngayon, direkta nang nababasa nito ang theme prop na galing sa App.js mo
+      ctx.fillStyle = theme === 'light' ? '#1e293b' : '#ffffff';
 
       stars.forEach((star) => {
         ctx.globalAlpha = star.alpha;
@@ -69,7 +68,7 @@ export default function StarfieldBackground({ children, count = 350, speed = 0.4
       window.removeEventListener('scroll', updateSize);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [count, speed, twinkle]);
+  }, [count, speed, twinkle, theme]); // 2. Idagdag ang 'theme' dito para mag-re-run kapag nagpalit ng mode
 
   return (
     <div style={{ position: 'relative', width: '100%', minHeight: '100vh', overflowX: 'hidden' }}>

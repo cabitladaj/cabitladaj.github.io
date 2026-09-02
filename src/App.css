@@ -1319,6 +1319,81 @@ section#projects {
   transform: none !important;
 }
 
+/* Container ng Stacked Cards */
+.stacked-images-container {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  margin-bottom: 20px;
+  perspective: 1000px;
+}
+
+/* Bawat layer ng picture na nakasalansan */
+.card-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card-layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Kapag hinover ang buong project card, mag-a-spread/scatter sila! */
+.project-card.stacked-card:hover .card-layer:nth-child(1) {
+  transform: rotate(-12deg) translateY(-8px) translateX(-15px) !important;
+}
+
+.project-card.stacked-card:hover .card-layer:nth-child(2) {
+  transform: rotate(0deg) translateY(-15px) translateX(0px) !important;
+}
+
+.project-card.stacked-card:hover .card-layer:nth-child(3) {
+  transform: rotate(12deg) translateY(-8px) translateX(15px) !important;
+}
+
+/* Badge para sa bilang ng photos */
+.photo-count-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  z-index: 10;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@keyframes depthPop3D {
+  0% {
+    opacity: 0;
+    transform: perspective(1200px) translateZ(-150px) scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1200px) translateZ(0px) scale(1);
+  }
+}
+
+.carousel-slide-img {
+  animation: depthPop3D 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+
 section#projects .section-title,
 section#projects .filter-tabs,
 section#projects .project-card {
